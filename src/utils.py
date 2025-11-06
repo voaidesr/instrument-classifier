@@ -59,7 +59,7 @@ def euclidean_d(X, C):
     """
     X2 = np.sum(X * X, axis=1, keepdims=True)
     C2 = np.sum(C*C, axis=1, keepdims=True).T
-    D2 = X2 + C2 - 2.0 * (X2 @ C2.T)
+    D2 = X2 + C2 - 2.0 * (X @ C.T)
     return np.argmin(D2, axis=1)
 
 def cosine_d(X, C):
