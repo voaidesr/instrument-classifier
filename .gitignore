@@ -1,7 +1,9 @@
-data/
+data/Raw
+data/Processed
 models/
 
 *.pkl
 *.csv
+*.wav
 
 .venv

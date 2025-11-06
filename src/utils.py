@@ -1,7 +1,7 @@
 import os, json, csv, glob
 import numpy as np
 
-def ensure_dict(path):
+def ensure_dir(path):
     os.makedirs(path, exist_ok=True)
 
 def read_metadata(path):
