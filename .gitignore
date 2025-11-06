@@ -1,6 +1,6 @@
 data/Raw
 data/Processed
-models/
+models/*
 
 *.pkl
 *.csv
