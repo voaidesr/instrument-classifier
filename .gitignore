@@ -3,3 +3,5 @@ models/
 
 *.pkl
 *.csv
+
+.venv
