@@ -7,3 +7,5 @@ models/
 *.wav
 
 .venv
+
+__pycache__

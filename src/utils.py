@@ -8,7 +8,12 @@ def read_metadata(path):
     rows = []
     with open(path, newline='', encoding='utf-8') as f:
         r = csv.reader(f)
+        cnt = 0
         for fn, cn in r:
+            if cnt == 0:
+                cnt += 1
+                continue
+            cnt += 1
             rows.append((fn.strip(), cn.strip()))
     return rows
 
