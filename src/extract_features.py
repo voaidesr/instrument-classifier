@@ -10,7 +10,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--data_root", default="data/Raw/Train/")
     ap.add_argument("--metadata", default="./data/Raw/Metadata_Train.csv")
-    ap.add_argument("--out_dir", default="data/Processed/")
+    ap.add_argument("--out_dir", default="data/Processed/Features")
     ap.add_argument("--sr", type=int, default=22050)
     ap.add_argument("--n_mfcc", type=int, default=20)
     ap.add_argument("--n_fft", type=int, default=1024)
