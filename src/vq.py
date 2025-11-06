@@ -2,21 +2,6 @@ import argparse, os, glob, utils
 import numpy as np
 from sklearn.cluster import KMeans
 
-def paths_from_metadata(metadata, features_dir):
-    paths = []
-    seen = set()
-    rows = utils.read_metadata(metadata)
-
-    for fn, _ in rows:
-        name = fn[:-4] + ".npy"
-        p = os.path.join(features_dir, name)
-        if os.path.exists(p) and p not in seen:
-            paths.append(p)
-            seen.add(p)
-
-    return paths
-
-
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--feat_dir", default="data/Processed")
@@ -28,7 +13,7 @@ def main():
     args = ap.parse_args()
 
     utils.ensure_dir(args.model_dir)
-    paths = paths_from_metadata(args.metadata, args.feat_dir)
+    paths = utils.paths_from_metadata(args.metadata, args.feat_dir)
 
     Xs = []
     for p in paths:

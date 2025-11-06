@@ -17,6 +17,20 @@ def read_metadata(path):
             rows.append((fn.strip(), cn.strip()))
     return rows
 
+def paths_from_metadata(metadata, features_dir):
+    paths = []
+    seen = set()
+    rows = read_metadata(metadata)
+
+    for fn, _ in rows:
+        name = fn[:-4] + ".npy"
+        p = os.path.join(features_dir, name)
+        if os.path.exists(p) and p not in seen:
+            paths.append(p)
+            seen.add(p)
+
+    return paths
+
 def save_metadata(path, items):
     meta = {}
     if os.path.exists(path):
