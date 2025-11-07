@@ -4,29 +4,37 @@ from sklearn.cluster import KMeans
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--feat_dir", default="data/Processed")
+    ap.add_argument("--feat_dir", default="data/Processed/Features")
     ap.add_argument("--model_dir", default="models")
-    ap.add_argument("--k", type=int, default="128")
-    ap.add_argument("--max_frames_per_file", type=int, default=1000)
+    ap.add_argument("--k", type=int, default=256)
+    ap.add_argument("--max_frames_per_file", type=int, default=2000)
     ap.add_argument("--random_state", type=int, default=42)
     ap.add_argument("--metadata", default="data/Raw/Metadata_Train.csv")
+    ap.add_argument("--data_root", default="data/Raw/Train")
     args = ap.parse_args()
 
     utils.ensure_dir(args.model_dir)
-    paths = utils.paths_from_metadata(args.metadata, args.feat_dir)
+    rows = utils.read_training_metadata(args.metadata, args.data_root)
+    paths = utils.paths_from_metadata(args.metadata, args.feat_dir, rows=rows)
+    total = len(paths)
+    print(f"[vq] fitting KMeans (k={args.k}) from {total} feature files")
 
     Xs = []
-    for p in paths:
+    rng = np.random.default_rng()
+
+    for file_idx, p in enumerate(paths):
         F = np.load(p)
 
         if F.size == 0: continue
         if F.shape[0] > args.max_frames_per_file:
-            idx = np.random.default_rng().choice(F.shape[0], args.max_frames_per_file, replace=False)
-            F = F[idx]
+            frame_idx = rng.choice(F.shape[0], args.max_frames_per_file, replace=False)
+            F = F[frame_idx]
         Xs.append(F)
+        utils.log_progress("vq:load", file_idx, total)
 
     X = np.vstack(Xs).astype(np.float32)
     d = X.shape[1]
+    print(f"[vq] training KMeans on {X.shape[0]} frames (d={d})")
 
     mean = X.mean(axis=0)
     std = X.std(axis=0) + 1e-8

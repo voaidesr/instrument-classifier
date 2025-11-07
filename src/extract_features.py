@@ -11,15 +11,17 @@ def main():
     ap.add_argument("--data_root", default="data/Raw/Train/")
     ap.add_argument("--metadata", default="./data/Raw/Metadata_Train.csv")
     ap.add_argument("--out_dir", default="data/Processed/Features")
-    ap.add_argument("--sr", type=int, default=22050)
-    ap.add_argument("--n_mfcc", type=int, default=20)
-    ap.add_argument("--n_fft", type=int, default=1024)
+    ap.add_argument("--sr", type=int, default=44100)
+    ap.add_argument("--n_mfcc", type=int, default=40)
+    ap.add_argument("--n_fft", type=int, default=2048)
     ap.add_argument("--hop_length", type=int, default=512)
     ap.add_argument("--max_duration", type=float, default=0.0, help="seconds; 0=all")
     args = ap.parse_args()
 
     utils.ensure_dir(args.out_dir)
-    rows = utils.read_metadata(args.metadata)
+    rows = utils.read_training_metadata(args.metadata, args.data_root)
+    total = len(rows)
+    print(f"[extract] preparing MFCCs for {total} files from {args.metadata}")
 
     mfcc_params = dict(
         sr = args.sr,
@@ -29,7 +31,7 @@ def main():
     )
 
 
-    for fn, _ in rows:
+    for idx, (fn, _) in enumerate(rows):
         wav_path = os.path.join(args.data_root, fn)
         y, sr = librosa.load(wav_path, sr=args.sr, mono=True)
 
@@ -41,8 +43,9 @@ def main():
         feats = M.T.astype(np.float32) # TODO: see if float32 and float64 makes any difference
 
         name = fn[:-4]
-        out_path = os.path.join(args.out_dir + name + ".npy")
+        out_path = os.path.join(args.out_dir, name + ".npy")
         np.save(out_path, feats)
+        utils.log_progress("extract", idx, total)
 
     utils.save_metadata("models/meta.json", {"mfcc_params": mfcc_params})
 if __name__ == '__main__':
