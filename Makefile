@@ -34,7 +34,7 @@ nb: histograms
 	@echo "[make] Training Naive Bayes classifier (alpha=$(ALPHA))"
 	$(PYTHON) src/train_nb.py --metadata $(TRAIN_METADATA) --hists_dir $(HIST_DIR) --models_dir $(MODELS_DIR) --alpha $(ALPHA)
 
-evaluate: nb
+evaluate:
 	@echo "[make] Evaluating on $(TEST_METADATA)"
 	$(PYTHON) src/predict.py --metadata $(TEST_METADATA) --data_root $(TEST_ROOT) --models_dir $(MODELS_DIR)
 
