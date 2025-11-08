@@ -24,15 +24,15 @@ features:
 
 codebook: features
 	@echo "[make] Training vector quantizer (k=$(K))"
-	$(PYTHON) src/vq.py --feat_dir $(FEATURE_DIR) --model_dir $(MODELS_DIR) --k $(K) --max_frames_per_file $(MAX_FRAMES) --metadata $(TRAIN_METADATA) --data_root $(DATA_ROOT)
+	$(PYTHON) src/vq.py --feat_dir $(FEATURE_DIR) --model_dir $(MODELS_DIR) --k $(K) --max_frames_per_file $(MAX_FRAMES) --metadata $(TRAIN_METADATA)
 
 histograms: codebook
 	@echo "[make] Building bag-of-audio histograms with $(METRIC) distance"
-	$(PYTHON) src/quantize.py --feature_dir $(FEATURE_DIR) --models_dir $(MODELS_DIR) --out_dir $(HIST_DIR) --metric $(METRIC) --metadata $(TRAIN_METADATA) --data_root $(DATA_ROOT)
+	$(PYTHON) src/quantize.py --feature_dir $(FEATURE_DIR) --models_dir $(MODELS_DIR) --out_dir $(HIST_DIR) --metric $(METRIC) --metadata $(TRAIN_METADATA)
 
 nb: histograms
 	@echo "[make] Training Naive Bayes classifier (alpha=$(ALPHA))"
-	$(PYTHON) src/train_nb.py --metadata $(TRAIN_METADATA) --data_root $(DATA_ROOT) --hists_dir $(HIST_DIR) --models_dir $(MODELS_DIR) --alpha $(ALPHA)
+	$(PYTHON) src/train_nb.py --metadata $(TRAIN_METADATA) --hists_dir $(HIST_DIR) --models_dir $(MODELS_DIR) --alpha $(ALPHA)
 
 evaluate: nb
 	@echo "[make] Evaluating on $(TEST_METADATA)"

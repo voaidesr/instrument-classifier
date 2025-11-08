@@ -4,14 +4,13 @@ import numpy as np
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--metadata", default="data/Raw/Metadata_Train.csv")
-    ap.add_argument("--data_root", default="data/Raw/Train")
     ap.add_argument("--hists_dir", default="data/Processed/Features_hist")
     ap.add_argument("--models_dir", default="models")
     ap.add_argument("--alpha", type=float, default=5.0, help="Laplace smoothing to store for inference")
     args = ap.parse_args()
 
     utils.ensure_dir(args.models_dir)
-    rows = utils.read_training_metadata(args.metadata, args.data_root)
+    rows = utils.read_metadata(args.metadata)
     print(f"[nb] preparing label map from {len(rows)} metadata rows")
 
     label_names = []

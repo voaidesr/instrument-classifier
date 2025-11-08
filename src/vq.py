@@ -10,11 +10,10 @@ def main():
     ap.add_argument("--max_frames_per_file", type=int, default=2000)
     ap.add_argument("--random_state", type=int, default=42)
     ap.add_argument("--metadata", default="data/Raw/Metadata_Train.csv")
-    ap.add_argument("--data_root", default="data/Raw/Train")
     args = ap.parse_args()
 
     utils.ensure_dir(args.model_dir)
-    rows = utils.read_training_metadata(args.metadata, args.data_root)
+    rows = utils.read_metadata(args.metadata)
     paths = utils.paths_from_metadata(args.metadata, args.feat_dir, rows=rows)
     total = len(paths)
     print(f"[vq] fitting KMeans (k={args.k}) from {total} feature files")

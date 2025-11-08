@@ -1,4 +1,4 @@
-import os, json, csv, warnings
+import os, json, csv
 import numpy as np
 
 def ensure_dir(path):
@@ -28,64 +28,6 @@ def read_metadata(path):
             rows.append((fn.strip(), cn.strip()))
     return rows
 
-
-def read_training_metadata(path, data_root):
-    """
-    Returns list of (filename, class) pairs for training.
-    The provided metadata file in this dataset ships with every Sound_Violin entry
-    pointing to the same Drum recordings, while the real violin audio files are
-    free-floating in the data_root directory. We detect these conflicting labels
-    and swap in the unreferenced violin recordings instead so that every class
-    has unique training examples.
-    """
-    rows = read_metadata(path)
-    rows_clean = []
-    seen = {}
-    conflicts = []
-    for fn, cls in rows:
-        prev = seen.get(fn)
-        if prev is None:
-            seen[fn] = cls
-            rows_clean.append((fn, cls))
-        elif prev == cls:
-            continue
-        else:
-            conflicts.append((fn, prev, cls))
-
-    if not conflicts:
-        return rows_clean
-
-    violin_conflicts = [
-        fn for fn, a, b in conflicts
-        if {"Sound_Violin", "Sound_Drum"} == {a, b}
-    ]
-    other_conflicts = [c for c in conflicts if c[0] not in violin_conflicts]
-    if other_conflicts:
-        raise RuntimeError(f"Unexpected conflicting labels in metadata: {other_conflicts[:5]}")
-
-    wave_files = sorted(
-        fn for fn in os.listdir(data_root)
-        if fn.lower().endswith(".wav")
-    )
-    unused = [fn for fn in wave_files if fn not in seen]
-    if len(unused) < len(violin_conflicts):
-        raise RuntimeError(
-            f"Need {len(violin_conflicts)} unused .wav files to repair violin metadata, "
-            f"but only found {len(unused)} in {data_root}"
-        )
-
-    warnings.warn(
-        f"Metadata contained {len(violin_conflicts)} Sound_Violin entries that reused Drum files. "
-        "Reassigning the unreferenced violin recordings from disk to fix training labels.",
-        RuntimeWarning,
-        stacklevel=2,
-    )
-
-    for fn in unused[:len(violin_conflicts)]:
-        seen[fn] = "Sound_Violin"
-        rows_clean.append((fn, "Sound_Violin"))
-
-    return rows_clean
 
 def paths_from_metadata(metadata, features_dir, rows=None):
     """

@@ -19,7 +19,7 @@ def main():
     args = ap.parse_args()
 
     utils.ensure_dir(args.out_dir)
-    rows = utils.read_training_metadata(args.metadata, args.data_root)
+    rows = utils.read_metadata(args.metadata)
     total = len(rows)
     print(f"[extract] preparing MFCCs for {total} files from {args.metadata}")
 

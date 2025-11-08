@@ -9,14 +9,13 @@ def main():
     ap.add_argument("--out_dir", default="data/Processed/Features_hist")
     ap.add_argument("--metric", choices=["euclidean", "cosine"], default="euclidean")
     ap.add_argument("--metadata", default="data/Raw/Metadata_Train.csv")
-    ap.add_argument("--data_root", default="data/Raw/Train")
     args = ap.parse_args()
 
     utils.ensure_dir(args.out_dir)
 
     path = os.path.join(args.models_dir, "codebook.npz")
     c, mean, std, k = utils.load_codebook(path)
-    rows = utils.read_training_metadata(args.metadata, args.data_root)
+    rows = utils.read_metadata(args.metadata)
     paths = utils.paths_from_metadata(args.metadata, args.feature_dir, rows=rows)
     total = len(paths)
     print(f"[quantize] converting {total} feature files into histograms using {args.metric} distance")
