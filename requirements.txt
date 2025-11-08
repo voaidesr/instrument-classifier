@@ -1,3 +1,4 @@
 librosa
 pandas
 numpy
+scikit-learn
