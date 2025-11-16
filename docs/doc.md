@@ -188,6 +188,27 @@ Because $\log 0.01 \ll \log 0.2$, the drum score is heavily penalized despite dr
 
 Each step relies on stored statistics (`models/codebook.npz`, `models/nb_counts.npz`, `models/meta.json`), so no retraining is needed for inference.
 
-## 8. References for Further Study
+## 8. Results
+
+The full pipeline was trained on roughly 700 recordings per instrument (Guitar, Drum, Piano, Violin) and evaluated on a held-out batch of about 80 clips. With the default hyperparameters (MFCC configuration, $K=256$ k-means codewords, Laplace $\alpha=5$), the multinomial Naive Bayes classifier reaches 87.5% accuracy:
+
+```
+accuracy: 0.8750
+confusion (rows=true, cols=pred):
+                  Guitar       Drum      Piano     Violin
+      Guitar          17          0          3          0
+        Drum           1         19          0          0
+       Piano           2          1         16          1
+      Violin           2          0          0         18
+```
+
+Interpreting the confusion matrix:
+
+- **Drums and violins** are identified almost perfectly; their timbral fingerprints occupy distinct regions in codeword space, so the histograms seldom clash with other classes.
+- **Guitars vs. pianos** are still the largest source of confusion overall, reflecting their shared harmonic content. Increasing $K$ or enriching the feature set (e.g., adding delta-MFCCs) is a natural next step if further separation is needed.
+- With only a few dozen validation clips per class, percent swings of a few points are expected; nevertheless the balanced accuracy indicates that the bag-of-audio representation captures the dominant frequency patterns for each instrument.
+
+
+## 9. References for Further Study
 
 1. Bishop, *Pattern Recognition and Machine Learning*: multinomial NB and Dirichlet priors.
