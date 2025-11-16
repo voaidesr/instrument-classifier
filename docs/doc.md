@@ -114,7 +114,7 @@ $$
 Because the multinomial coefficient does not depend on $c$, MAP (maximum a posteriori) classification reduces to comparing log posteriors. MAP simply means we choose the class with the largest posterior probability $p(c \mid \mathbf{h})$, which balances how frequent the class is (the prior $p(c)$) with how well its codeword distribution explains the histogram (the likelihood term). Every time the histogram gains a count in bin $k$, the log score grows by $\log \theta_{c,k}$, so instruments that “expect” those codewords gain confidence quickly.
 
 $$
- \log p(c \mid \mathbf{h}) = \log p(c) + \sum_{k=1}^K h_k \log \theta_{c,k} + \text{const}.
+ \log \, p(c \mid \mathbf{h}) = \log \, p(c) + \sum_{k=1}^K h_k \log \, \theta_{c,k} + \text{const}.
 $$
 
 This is Bayes' rule written in log-space: prior evidence $\log p(c)$ is added to the per-codeword log-likelihoods. The Naive Bayes assumption simply states that, once we know the instrument, the counts behave independently-an approximation that keeps the math tractable while still capturing the dominant frequency patterns.
