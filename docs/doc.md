@@ -2,10 +2,6 @@
 
 This document explains every stage of the bag-of-audio pipeline implemented in this repository. It focuses on the statistical ideas behind the preprocessing, vector quantization, and probabilistic prediction stages.
 
-$$
-\renewcommand{\log}{\operatorname{log}}
-$$
-
 ## 1. Signal View: Waveform and Spectrogram
 
 We study the audio signal $x(t)$ by looking at both the raw waveform and its time-frequency energy distribution. Figure 1 visualizes a piano clip from the training set using standard signal-processing tools that make this project possible.
