@@ -1,7 +1,6 @@
 # Instrument Classification using the Multinomial Naive Bayes Method
 
->[!warning]
-> Still in development.
+A full theoretical explanation of of the project can be found [here](./docs/doc.md).
 
 ## Overview
 
@@ -22,6 +21,9 @@ This repository implements a lightweight bag-of-audio pipeline for identifying m
    The pipeline relies on `librosa`, `numpy`, `pandas`, and `scikit-learn`. Librosa may require system packages such as `libsndfile` or `ffmpeg`, depending on your OS.
 
 ## Data Layout
+
+This code will fit any dataset with whatever instruments there are provided in the metadata.
+I have used [this](https://www.kaggle.com/datasets/soumendraprasad/musical-instruments-sound-dataset) data set in my experiments.
 
 The scripts assume the following structure (feel free to adjust paths via CLI flags or Make variables):
 
