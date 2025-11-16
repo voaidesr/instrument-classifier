@@ -13,9 +13,11 @@ We study the audio signal $x(t)$ by looking at both the raw waveform and its tim
 ### 1.1 Short-Time Fourier Transform (STFT)
 
 The STFT slices the signal into overlapping windows of length $N$ samples, multiplies each slice by a window function $w[n]$, and computes the discrete Fourier transform (DFT) of each slice:
+
 $$
-X(m, k) = \sum_{n=0}^{N-1} x[n + mH] \, w[n] \, e^{-j 2\pi k n / N},
+X(m, k) = \sum_{n=0}^{N-1} x[n + mH] \, w[n] \, e^{-j 2\pi k n / N}
 $$
+
 where $m$ indexes the frame, $k$ the frequency bin, and $H$ the hop size. The squared magnitude $|X(m,k)|^2$ describes how much energy sits near frequency $k$ during frame $m$.
 
 ### 1.2 Mel-Spectrogram Intuition
